@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/Style.uss?fileID=7433441132597879392&amp;guid=04c1363b909689c4cabde85ce9377fce&amp;type=3#Style" />
+    <ui:VisualElement name="Div_Top" style="flex-grow: 1; width: 100%; height: 15%; background-color: rgb(118, 118, 118); align-items: auto; align-self: auto; justify-content: flex-start;" />
+    <ui:VisualElement name="Div_Main" style="flex-grow: 1; width: 100%; height: 75%; background-color: rgb(229, 124, 124); align-items: auto; align-self: auto; justify-content: flex-start;" />
+    <ui:VisualElement name="Div_Button" style="flex-grow: 1; width: 100%; height: 20%; background-color: rgb(185, 204, 65); align-items: center; align-self: auto; justify-content: flex-start; flex-direction: row;">
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button1" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button2" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button3" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button4" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button5" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button6" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button7" style="align-items: auto; justify-content: flex-start;" />
+        <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button8" style="align-items: auto; justify-content: flex-start;" />
+    </ui:VisualElement>
+</ui:UXML>
