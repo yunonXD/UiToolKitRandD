@@ -4,39 +4,34 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private Dictionary<KeyCode, System.Action> keyBindings = new();
-
-    [SerializeField] private UIDocument UIDoc;
+    private Dictionary<KeyCode, int> keyToButtonIndex = new();
+    [SerializeField] private UiManager uiManager;
 
     void Start()
     {
-        var root = UIDoc.rootVisualElement;
-
+        // 예: F1~F8 키 → 1~8번 버튼
         for (int i = 1; i <= 8; i++)
         {
-            string name = $"Button_{i}";
-            Button button = root.Q<Button>(name);
-
-            if (button != null)
-            {
-                int index = i;
-                System.Action action = () => Debug.Log($"Button_{index} clicked via F{index}");
-                button.clicked += action;
-
-                keyBindings.Add(KeyCode.F1 + (i - 1), action); // F1 ~ F8
-            }
+            keyToButtonIndex.Add(KeyCode.F1 + (i - 1), i);
         }
     }
-
     void Update()
     {
-
-        foreach (var kvp in keyBindings)
+        foreach (var kvp in keyToButtonIndex)
         {
             if (Input.GetKeyDown(kvp.Key))
             {
-                kvp.Value?.Invoke();
+                uiManager.TriggerButtonByIndex(kvp.Value);
             }
+        }
+    }
+    // 기존 OnKeyReceived도 필요 시 유지
+    public void OnKeyReceived(byte vkCode, bool isDown)
+    {
+        KeyCode key = MapVKToKeyCode(vkCode);
+        if (isDown && keyToButtonIndex.TryGetValue(key, out var index))
+        {
+            uiManager.TriggerButtonByIndex(index);
         }
     }
         
@@ -123,14 +118,14 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    public void OnKeyReceived(byte vkCode, bool isDown)
-    {
-        // VK 코드를 Unity KeyCode로 매핑
-        KeyCode key = MapVKToKeyCode(vkCode);
-        if (isDown && keyBindings.TryGetValue(key, out var action))
-        {
-            action?.Invoke();
-        }
-    }
+    // public void OnKeyReceived(byte vkCode, bool isDown)
+    // {
+    //     // VK 코드를 Unity KeyCode로 매핑
+    //     KeyCode key = MapVKToKeyCode(vkCode);
+    //     if (isDown && keyBindings.TryGetValue(key, out var action))
+    //     {
+    //         action?.Invoke();
+    //     }
+    // }
 
 }

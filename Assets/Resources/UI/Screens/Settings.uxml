@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 0; background-color: rgba(243, 218, 45, 0.96); flex-direction: row; align-self: stretch; flex-shrink: 0; flex-wrap: wrap;">
+        <ui:Button text="1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="1" />
+        <ui:Button text="2" parse-escape-sequences="true" display-tooltip-when-elided="true" name="2" tabindex="1" />
+        <ui:Button text="3" parse-escape-sequences="true" display-tooltip-when-elided="true" name="3" tabindex="2" />
+        <ui:Button text="4" parse-escape-sequences="true" display-tooltip-when-elided="true" name="4" tabindex="3" />
+        <ui:Label tabindex="-1" text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+        <ui:Toggle label="Toggle" tabindex="4" />
+        <ui:Toggle label="Toggle" tabindex="5" />
+        <ui:DropdownField label="Dropdown" tabindex="6" />
+    </ui:VisualElement>
+</ui:UXML>
