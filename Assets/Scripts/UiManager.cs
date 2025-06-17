@@ -60,6 +60,7 @@ public class UiManager : MonoBehaviour{
         
         if (screenTemplates.TryGetValue(screenName, out var template)){
             var instance = template.Instantiate();
+            instance.style.width = new Length(100, LengthUnit.Percent);
             divMain.Add(instance);
 
             if (screenControllers.TryGetValue(screenName, out var controller)){

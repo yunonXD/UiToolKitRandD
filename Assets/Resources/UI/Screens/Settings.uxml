@@ -7,6 +7,7 @@
         <ui:Label tabindex="-1" text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" />
         <ui:Toggle label="Toggle" tabindex="4" />
         <ui:Toggle label="Toggle" tabindex="5" />
-        <ui:DropdownField label="Dropdown" tabindex="6" />
+        <ui:DropdownField label="Dropdown" tabindex="6" name="DropdownField" />
+        <ui:ListView name="MyListView" selection-type="Single" horizontal-scrolling="true" reorderable="false" focusable="false" show-border="false" />
     </ui:VisualElement>
 </ui:UXML>
