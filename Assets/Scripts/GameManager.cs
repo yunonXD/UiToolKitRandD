@@ -2,21 +2,19 @@ using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour{
+
     private Dictionary<KeyCode, int> keyToButtonIndex = new();
     [SerializeField] private UiManager uiManager;
-
-    void Start()
-    {
-        // 예: F1~F8 키 → 1~8번 버튼
-        for (int i = 1; i <= 8; i++)
-        {
+    
+    void Start(){
+        
+        for (int i = 1; i <= 8; i++) {      // 예: F1~F8 키 → 1~8번 버튼
             keyToButtonIndex.Add(KeyCode.F1 + (i - 1), i);
         }
     }
-    void Update()
-    {
+    void Update(){
+        
         foreach (var kvp in keyToButtonIndex)
         {
             if (Input.GetKeyDown(kvp.Key))
@@ -26,16 +24,15 @@ public class GameManager : MonoBehaviour
         }
     }
     // 기존 OnKeyReceived도 필요 시 유지
-    public void OnKeyReceived(byte vkCode, bool isDown)
-    {
+    public void OnKeyReceived(byte vkCode, bool isDown) {
+        
         KeyCode key = MapVKToKeyCode(vkCode);
-        if (isDown && keyToButtonIndex.TryGetValue(key, out var index))
-        {
+        if (isDown && keyToButtonIndex.TryGetValue(key, out var index)){
             uiManager.TriggerButtonByIndex(index);
         }
     }
         
-    private KeyCode MapVKToKeyCode(byte vkCode) {
+    private KeyCode MapVKToKeyCode(byte vkCode){
         // Function keys
         if (vkCode >= 0x70 && vkCode <= 0x7B) // F1 ~ F12
             return KeyCode.F1 + (vkCode - 0x70);
@@ -91,7 +88,7 @@ public class GameManager : MonoBehaviour
             0x2C => KeyCode.Print,
             0x2D => KeyCode.Insert,
             0x2E => KeyCode.Delete,
-            
+
             // OEM/special characters
             0xBA => KeyCode.Semicolon,     // ;
             0xBB => KeyCode.Equals,        // =
@@ -117,15 +114,4 @@ public class GameManager : MonoBehaviour
             _ => KeyCode.None,
         };
     }
-
-    // public void OnKeyReceived(byte vkCode, bool isDown)
-    // {
-    //     // VK 코드를 Unity KeyCode로 매핑
-    //     KeyCode key = MapVKToKeyCode(vkCode);
-    //     if (isDown && keyBindings.TryGetValue(key, out var action))
-    //     {
-    //         action?.Invoke();
-    //     }
-    // }
-
 }

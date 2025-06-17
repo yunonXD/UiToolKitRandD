@@ -20,10 +20,9 @@ public class KeyReceiverUDP : MonoBehaviour{
     private void OnDisable(){
         listenerThread?.Abort();
     }
-
+    
     /// @brief UDP 초기화 및 실행
-    public void Initialize()
-    {
+    public void Initialize(){
         listenerThread = new Thread(StartListener);
         listenerThread.IsBackground = true;
         listenerThread.Start();
@@ -51,23 +50,29 @@ public class KeyReceiverUDP : MonoBehaviour{
     /// @detail data가 make_str 또는 break_str 형식의 데이터이므로 해당 데이터를 비교하여 키 이벤트를 처리
     /// @param[in] data 받아온 바이트(데이터)
     private void ProcessKeyData(byte[] data) {
-        if (data.Length > 0) {
+    
+        if (data.Length > 0){
+
             byte[] fixedData = new byte[8];
             Array.Copy(data, fixedData, Math.Min(data.Length, 8));
-            
+
             //Debug.Log($"[UDP Key] Raw Bytes: {BitConverter.ToString(data)}");
 
-            foreach (var keyTable in KeyTables.KeyTableDictionary.Values){
-                if (CompareByteArrays(fixedData, keyTable.make_str)){
+            foreach (var keyTable in KeyTables.KeyTableDictionary.Values)
+            {
+                if (CompareByteArrays(fixedData, keyTable.make_str))
+                {
                     SendKeyDown(keyTable.os_vk_key);
 
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                    {
                         gameManager.OnKeyReceived(keyTable.os_vk_key, true);
                     });
 
                     return;
                 }
-                else if (CompareByteArrays(fixedData, keyTable.break_str)){
+                else if (CompareByteArrays(fixedData, keyTable.break_str))
+                {
                     SendKeyUp(keyTable.os_vk_key);
                     return;
                 }

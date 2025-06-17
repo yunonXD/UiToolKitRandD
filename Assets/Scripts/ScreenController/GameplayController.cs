@@ -7,14 +7,14 @@ using System;
 public class GameplayController : IScreenController
 {
     private Action<string> navigate;
-    public void Initialize(VisualElement root, Action<string> onNavigate)
-    {
+    public void Initialize(VisualElement root, Action<string> onNavigate){
+        
         this.navigate = onNavigate;
     }
     
     
-    public void OnButtonPressed(int buttonIndex)
-    {
+    public void OnButtonPressed(int buttonIndex){
+        
         switch (buttonIndex)
         {
             case 1: navigate("MainMenu"); break;
