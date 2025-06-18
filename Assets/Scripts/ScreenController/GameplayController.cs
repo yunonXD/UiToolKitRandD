@@ -10,6 +10,10 @@ public class GameplayController : IScreenController
     public void Initialize(VisualElement root, Action<string> onNavigate){
         
         this.navigate = onNavigate;
+        
+        root.style.flexGrow = 1;
+        root.style.height = Length.Percent(100);
+        root.style.width = Length.Percent(100);
     }
     
     

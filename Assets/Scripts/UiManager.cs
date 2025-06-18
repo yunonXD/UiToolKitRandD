@@ -9,6 +9,8 @@ public class UiManager : MonoBehaviour{
     private VisualElement root;
     private VisualElement divMain, divTop, divButton;
     private Label titleLabel;
+	private Label timeLabel;
+	private Label modeLabel;
 
     [SerializeField] private UIDocument UIDoc;
 
@@ -25,9 +27,16 @@ public class UiManager : MonoBehaviour{
         divTop = root.Q<VisualElement>("Div_Top");
         divButton = root.Q<VisualElement>("Div_Button");
         titleLabel = divTop.Q<Label>("Title");
+		timeLabel = divTop.Q<Label>("Time");
+		modeLabel = divTop.Q<Label>("Mode");
 
         LoadScreens(); // UXML 등록
         SwitchToScreen("MainMenu");
+    }
+
+    private void Update()
+    {
+        timeLabel.text =  DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
     }
 
     void LoadScreens(){
@@ -52,7 +61,7 @@ public class UiManager : MonoBehaviour{
     }
     
     IScreenController currentController;
-    private Dictionary<Button, Action> buttonCallbacks = new(); // 버튼 핸들러를 Dictionary로 추적해서 덮어쓰기 전에 제거
+    private readonly Dictionary<Button, Action> buttonCallbacks = new(); // 버튼 핸들러를 Dictionary로 추적해서 덮어쓰기 전에 제거
     void SwitchToScreen(string screenName){
 
         titleLabel.text = screenName;
