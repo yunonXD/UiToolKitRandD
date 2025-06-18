@@ -74,7 +74,8 @@ public class MainMenuController : IScreenController {
         switch (buttonIndex)
         {
             case 1: navigate("Gameplay"); break;
-            case 2: navigate("Settings"); break;
+            case 2: navigate("MapControlPlay"); break;
+            case 3: navigate("Settings"); break;
             default: break;
         }
     }

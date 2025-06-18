@@ -45,18 +45,21 @@ public class UiManager : MonoBehaviour{
             { "MainMenu", Resources.Load<VisualTreeAsset>("UI/Screens/MainMenu") },
             { "Settings", Resources.Load<VisualTreeAsset>("UI/Screens/Settings") },
             { "Gameplay", Resources.Load<VisualTreeAsset>("UI/Screens/Gameplay") },
+            { "MapControlPlay", Resources.Load<VisualTreeAsset>("UI/Screens/MapControlPlay") },
         };
 
         screenControllers = new Dictionary<string, IScreenController> {
             { "MainMenu", new MainMenuController() },
             { "Settings", new SettingsController() },
             { "Gameplay", new GameplayController() },
+            { "MapControlPlay", new MapControlPlayContoller()},
         };
 
         screenButtonLabels = new Dictionary<string, string[]> {
-            { "MainMenu", new[] { "Start", "Settings", "Exit" } },
+            { "MainMenu", new[] { "Start","Map" ,"Settings", "Exit" } },
             { "Settings", new[] { "Audio", "Graphics", "Back" } },
             { "Gameplay", new[] { "Back"} },
+            { "MapControlPlay", new[] { "Back"} },
         };
     }
     

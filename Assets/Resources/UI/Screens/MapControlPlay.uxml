@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgba(243, 218, 45, 0.96); flex-direction: column; align-self: stretch; flex-shrink: 0; align-items: stretch; flex-wrap: wrap; flex-basis: 100%; width: auto; height: auto; justify-content: flex-start;">
+        <ui:Label tabindex="-1" text="Iam Map Test" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+        <ui:Label tabindex="-1" text="==Line==" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+        <ui:VisualElement name="MapViewEle" style="flex-grow: 1; height: auto; flex-shrink: 0; align-items: stretch; justify-content: flex-start; align-self: stretch; background-color: rgba(0, 0, 0, 0.57);" />
+    </ui:VisualElement>
+</ui:UXML>
