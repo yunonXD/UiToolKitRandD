@@ -38,10 +38,6 @@ public class MapView : VisualElement {
         mapImage = new Image {
             image = Resources.Load<Texture2D>("Map/Terrain2"),
             scaleMode = ScaleMode.ScaleToFit ,
-            // style = {
-            //     width = 2048,
-            //     height = 2048
-            // }
         };
 
         mapContainer.Add(mapImage);

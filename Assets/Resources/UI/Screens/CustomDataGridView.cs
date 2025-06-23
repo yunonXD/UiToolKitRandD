@@ -1,18 +1,20 @@
-using UnityEngine;
-using UnityEngine.UIElements;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
+using UnityEngine;
+using System.Linq;
 
 public class CustomDataGridView : VisualElement {
-    private VisualElement headerRow;
-    private ScrollView itemScrollView;
+    private readonly VisualElement headerRow;
+    private readonly ScrollView itemScrollView;
     private List<float> columnWidths = new();
-    private List<VisualElement> rows = new();
+    private readonly List<VisualElement> rows = new();
     private VisualElement selectedRow;
     private const int RowHeight = 28;
-    
+
     private int tabIndexOffset = 0;
 
     public CustomDataGridView() {
+        focusable = true;
         style.flexDirection = FlexDirection.Column;
         style.flexGrow = 1;
         style.flexShrink = 1;
@@ -21,11 +23,11 @@ public class CustomDataGridView : VisualElement {
         style.justifyContent = Justify.FlexStart;
 
         RegisterCallback<KeyDownEvent>(OnKeyDownEvent);
-        RegisterCallback<FocusInEvent>(_ => HighlightSelectedRow(true));
+        RegisterCallback<FocusInEvent>(evt => {
+            HighlightSelectedRow(true);
+            if (selectedRow == null && rows.Count > 0) SelectRow(rows[0]);
+        });
         RegisterCallback<FocusOutEvent>(_ => HighlightSelectedRow(false));
-
-
-        style.backgroundColor = new Color(1f, 0.5f, 0.5f); 
 
         headerRow = new VisualElement {
             style = {
@@ -88,7 +90,7 @@ public class CustomDataGridView : VisualElement {
 
     public void AddRow(List<string> cellTexts) {
         var row = new VisualElement {
-            focusable = false,
+            focusable = true,
             style = {
                 flexDirection = FlexDirection.Row,
                 alignItems = Align.Center,
@@ -98,15 +100,11 @@ public class CustomDataGridView : VisualElement {
             }
         };
 
-        row.RegisterCallback<ClickEvent>(_ => {
-            this.Focus();  // 포커스를 이 컨트롤로 이동
-            SelectRow(row);
-        });
+        row.RegisterCallback<FocusInEvent>(_ => SelectRow(row));
 
         for (int i = 0; i < cellTexts.Count; i++) {
             var cell = new Label(cellTexts[i]) {
-                focusable = true, // focusable 활성화
-                tabIndex = tabIndexOffset + rows.Count * cellTexts.Count + i,
+                focusable = false,
                 style = {
                     height = RowHeight,
                     unityTextAlign = TextAnchor.MiddleCenter,
@@ -134,9 +132,7 @@ public class CustomDataGridView : VisualElement {
 
         itemScrollView.Add(row);
         rows.Add(row);
-
-        if (selectedRow == null)
-            SelectRow(row);
+        if (selectedRow == null) SelectRow(row);
     }
 
     private void SelectRow(VisualElement row) {
@@ -145,8 +141,10 @@ public class CustomDataGridView : VisualElement {
 
         selectedRow = row;
 
-        if (this.focusController?.focusedElement == this)
+        var focusedVisual = this.focusController?.focusedElement as VisualElement;
+        if (focusedVisual != null && (this == focusedVisual || row.Contains(focusedVisual))) {
             selectedRow.style.backgroundColor = new Color(0.2f, 0.4f, 0.8f, 0.3f);
+        }
     }
 
     private void HighlightSelectedRow(bool highlight) {
@@ -155,67 +153,91 @@ public class CustomDataGridView : VisualElement {
             ? new Color(0.2f, 0.4f, 0.8f, 0.3f)
             : StyleKeyword.Null;
     }
-    
+
     private void OnKeyDownEvent(KeyDownEvent evt) {
-        if (rows.Count == 0 ) return;
-        
+        if (rows.Count == 0) return;
+
         int currentIndex = selectedRow != null ? rows.IndexOf(selectedRow) : -1;
-    
+
         switch (evt.keyCode) {
             case KeyCode.UpArrow:
                 if (currentIndex > 0) {
                     SelectRow(rows[currentIndex - 1]);
                     evt.StopImmediatePropagation();
+                    evt.PreventDefault();
                 }
                 break;
-    
+
             case KeyCode.DownArrow:
                 if (currentIndex < rows.Count - 1) {
                     SelectRow(rows[currentIndex + 1]);
                     evt.StopImmediatePropagation();
+                    evt.PreventDefault();
                 }
                 break;
-        }
-    }
-    
-    /// 자신의 부모에서 앞에 있는 모든 focusable 컨트롤 수를 기준으로 tabIndex 오프셋을 계산
-    public void UpdateTabIndexes() {
-        tabIndexOffset = 0;
 
-        if (hierarchy.parent == null) return;
+            case KeyCode.Tab: {
+                evt.StopImmediatePropagation();
+                evt.PreventDefault();
 
-        var parent = this.hierarchy.parent;
+                // 루트 가져오기
+                VisualElement root = this;
+                while (root.hierarchy.parent != null) {
+                    root = root.hierarchy.parent;
+                }
 
-        foreach (var child in parent.Children()) {
-            if (child == this) { break; }
+                // shift 키 여부
+                bool shift = evt.shiftKey;
 
-            if (child.focusable || HasFocusableDescendants(child)) {
-                tabIndexOffset += CountFocusable(child);
+                // 포커서블 요소 리스트
+                List<VisualElement> focusables = root.Query<VisualElement>().ToList()
+                    .Where(e => e.focusable && e.tabIndex >= 0)
+                    .ToList();
+
+                focusables.Sort((a, b) => a.tabIndex.CompareTo(b.tabIndex));
+                // 현재 인덱스 찾기
+                int current = focusables.IndexOf(this);
+
+                if (current >= 0) {
+                    int next = shift
+                        ? (current - 1 + focusables.Count) % focusables.Count
+                        : (current + 1) % focusables.Count;
+
+                    focusables[next].Focus();
+                }
+                break;
             }
         }
     }
-    
-    /// 자식까지 포함해서 focusable 요소 수를 계산
+
+    public void UpdateTabIndexes(int offset = 0) {
+        tabIndexOffset = offset;
+
+        int index = tabIndexOffset;
+
+        foreach (var row in rows) {
+            foreach (var child in row.Children()) {
+                if (child.focusable)
+                    child.tabIndex = index++;
+            }
+        }
+    }
+
+
     private int CountFocusable(VisualElement root) {
         int count = 0;
-
         if (root.focusable) count++;
-
         foreach (var child in root.Children()) {
             count += CountFocusable(child);
         }
-
         return count;
     }
-    
-    /// 해당 요소 및 자식 중에 focusable이 있는지 확인
+
     private bool HasFocusableDescendants(VisualElement root) {
         if (root.focusable) return true;
-
         foreach (var child in root.Children()) {
             if (HasFocusableDescendants(child)) return true;
         }
-
         return false;
     }
 

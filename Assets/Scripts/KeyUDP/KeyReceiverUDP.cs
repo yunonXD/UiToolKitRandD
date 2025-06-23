@@ -22,7 +22,7 @@ public class KeyReceiverUDP : MonoBehaviour{
     }
     
     /// @brief UDP 초기화 및 실행
-    public void Initialize(){
+    private void Initialize(){
         listenerThread = new Thread(StartListener);
         listenerThread.IsBackground = true;
         listenerThread.Start();
@@ -31,12 +31,12 @@ public class KeyReceiverUDP : MonoBehaviour{
     /// @brief 데이터 받아올 UDP 리스너
     private void StartListener() {
         using (UdpClient listener = new UdpClient(listenPort)) {
-            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+            IPEndPoint groupEp = new IPEndPoint(IPAddress.Any, listenPort);
             Debug.Log("Listening for UDP broadcasts on port " + listenPort);
 
             try {
                 while (true) {
-                    byte[] bytes = listener.Receive(ref groupEP);
+                    byte[] bytes = listener.Receive(ref groupEp);
                     ProcessKeyData(bytes);
                 }
             }
@@ -92,7 +92,7 @@ public class KeyReceiverUDP : MonoBehaviour{
             return true;
         }
 
-        /// @brief 가상키 인풋 (매크로 방식)
+        /// @brief 가상키 인풋 (가상키 입력 매크로 방식)
         [DllImport("user32.dll")]
         private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
 

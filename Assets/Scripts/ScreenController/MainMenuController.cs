@@ -25,21 +25,46 @@ public class MainMenuController : IScreenController {
         
         var items3 = root.Q<DropdownField>("Drop3");
         items3.choices = new List<string> { "Option G", "Option H", "Option I" };
-        items3.value = "Option G"; // 초기 선택 값
+        items3.value = "Option G"; // 초기 선택 
+        
+        // var vElement = root.Q<VisualElement>("GroupBox");
+        // if (vElement != null) {
+        //     vElement.Clear();
+        //     var grid = new CustomDataGridView();
+        //     grid.SetHeaders(new List<string> { "ID", "Name", "Level", "Description", "Modified", "Data" },
+        //         new List<float> { 200, 150, 80, 150, 160, 100 });
+        //     LoadScenariosIntoGrid(grid);
+        //
+        //     // GroupBox가 배치되기 전에 tabIndex로 몇 개 요소가 있는지 계산
+        //     int offset = CountFocusableBefore(root, vElement);
+        //
+        //     vElement.Add(grid);
+        //     grid.UpdateTabIndexes(offset);
+        // }
 
-        var scrollView = root.Q<VisualElement>("GroupBox");
-        if (scrollView != null)
-        {
-            scrollView.Clear();
-            var grid = new CustomDataGridView();
-            grid.SetHeaders(new List<string> { "ID", "Name", "Level", "Description", "Modified", "Data" },
-                new List<float> { 200, 150, 80, 150, 160, 100 });
-            LoadScenariosIntoGrid(grid);
-            scrollView.Add(grid);
-            grid.UpdateTabIndexes();
-            //grid.tabIndex = 5;
+        
+        GlobalFocusBlocker.ApplyTo(root);
+    }
+    
+    /// GroupBox 이전까지 모든 focusable 요소를 탐색해 tabIndex offset을 구함
+    private int CountFocusableBefore(VisualElement root, VisualElement target) {
+        var allElements = new List<VisualElement>();
+        CollectElementsInOrder(root, allElements);
+
+        int count = 0;
+        foreach (var e in allElements) {
+            if (e == target) break;
+            if (e.focusable) count++;
         }
+        return count;
+    }
 
+    /// 트리 순회하면서 실제 배치 순서대로 요소 수집
+    private void CollectElementsInOrder(VisualElement root, List<VisualElement> list) {
+        list.Add(root);
+        foreach (var child in root.Children()) {
+            CollectElementsInOrder(child, list);
+        }
     }
 
     private void LoadScenariosIntoGrid(CustomDataGridView grid) {

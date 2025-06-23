@@ -3,7 +3,7 @@
         <ui:VisualElement name="Sample1" style="flex-grow: 1; background-color: rgba(243, 218, 45, 0.96); flex-direction: row; align-self: stretch; flex-shrink: 0; height: 50%; width: 100%;">
             <ui:Label tabindex="-1" text="Main&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" />
             <ui:VisualElement style="flex-grow: 1;">
-                <ui:TextField picking-mode="Ignore" label="Text Field" value="TextHere." />
+                <ui:TextField picking-mode="Ignore" label="Text Field" value="TextHere." auto-correction="false" is-delayed="true" />
                 <ui:RadioButton label="Radio Button" name="Radi1" tabindex="1" />
                 <ui:RadioButton label="Radio Button" name="Radi2" tabindex="2" />
                 <ui:DropdownField label="Dropdown" name="Drop1" tabindex="3" />
