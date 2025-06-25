@@ -43,9 +43,13 @@ public class CustomDataGridView : VisualElement {
                 flexGrow = 1,
                 flexShrink = 1,
                 width = Length.Percent(100),
-                flexDirection = FlexDirection.Column
+                flexDirection = FlexDirection.Column,
             }
         };
+        //itemScrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+        itemScrollView.verticalScroller.focusable = false;
+        itemScrollView.verticalScroller.slider.focusable = false;
+        itemScrollView.horizontalScroller.focusable = false;
         Add(itemScrollView);
     }
 
@@ -201,8 +205,8 @@ public class CustomDataGridView : VisualElement {
             ? (currentIndex - 1 + focusables.Count) % focusables.Count
             : (currentIndex + 1) % focusables.Count;
         
-        Debug.Log($"[Tab] 현재: {currentFocused.name}, 이동 대상: {focusables[next].name}");
-        focusables.ForEach(e => Debug.Log($"{e.name} - {e.tabIndex}"));
+        // Debug.Log($"[Tab] 현재: {currentFocused.name}, 이동 대상: {focusables[next].name}");
+        // focusables.ForEach(e => Debug.Log($"{e.name} - {e.tabIndex}"));
         focusables[next].Focus();
     }
     
