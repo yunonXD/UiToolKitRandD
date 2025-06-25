@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-shrink: 1; width: auto; height: auto;">
-        <ui:VisualElement name="Sample1" style="flex-grow: 1; background-color: rgba(243, 218, 45, 0.96); flex-direction: row; align-self: stretch; flex-shrink: 0; height: 70%; width: 100%;">
-            <ui:Label tabindex="-1" text="Main&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" />
-            <ui:VisualElement style="flex-grow: 1;">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-shrink: 1; width: 100%; height: 50%;">
+        <ui:VisualElement name="Sample1" style="flex-grow: 1; background-color: rgba(243, 218, 45, 0.96); flex-direction: row; align-self: stretch; flex-shrink: 0; height: 50%; width: 100%;">
+            <ui:Label tabindex="-1" text="Main&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="width: 5%; height: 100%;" />
+            <ui:VisualElement style="flex-grow: 1; width: 95%; height: 100%; flex-shrink: 0; align-self: stretch;">
                 <ui:RadioButton label="Radio Button" name="Radi1" tabindex="1" />
                 <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" tabindex="2" name="TextField" style="height: 147px; width: 316px;" />
                 <ui:RadioButton label="Radio Button" name="Radi2" tabindex="3" />
@@ -11,9 +11,9 @@
                 <ui:DropdownField label="Dropdown" name="Drop3" tabindex="6" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Sample2" style="flex-grow: 1; background-color: rgba(45, 243, 117, 0.96); flex-direction: column; align-self: stretch; flex-shrink: 0; width: 100%; height: 30%;">
+        <ui:VisualElement name="Sample2" style="flex-grow: 1; background-color: rgba(45, 243, 117, 0.96); flex-direction: column; align-self: stretch; flex-shrink: 0; width: 100%; height: 50%;">
             <ui:Label tabindex="-1" text="Table Test" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: upper-center; -unity-font-style: bold; height: auto; width: auto;" />
-            <ui:VisualElement name="GroupBox" style="flex-grow: 1; align-self: center; justify-content: center; height: auto; width: auto; flex-shrink: 0;" />
+            <ui:VisualElement name="GroupBox" style="flex-grow: 1; align-self: center; justify-content: flex-start; height: auto; width: auto; flex-shrink: 0; min-width: auto;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

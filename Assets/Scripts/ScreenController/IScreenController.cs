@@ -1,7 +1,6 @@
 using UnityEngine.UIElements;
 using System;
 
-
 /// @brief 화면 인터페이스 컨트롤러
 public interface IScreenController{
     

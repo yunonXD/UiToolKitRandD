@@ -4,10 +4,11 @@ using UnityEngine;
 using System.Linq;
 
 public class CustomDataGridView : VisualElement {
-    private readonly VisualElement headerRow;
-    private readonly ScrollView itemScrollView;
-    private List<float> columnWidths = new();
+    
     private readonly List<VisualElement> rows = new();
+    private readonly ScrollView itemScrollView;
+    private readonly VisualElement headerRow;
+    private List<float> columnWidths = new();
     private VisualElement selectedRow;
     private const int RowHeight = 28;
 
@@ -16,8 +17,6 @@ public class CustomDataGridView : VisualElement {
         style.flexDirection = FlexDirection.Column;
         style.flexGrow = 1;
         style.flexShrink = 1;
-        style.width = Length.Percent(100);
-        style.height = Length.Percent(100);
         style.justifyContent = Justify.FlexStart;
 
         RegisterCallback<KeyDownEvent>(OnKeyDownEvent);
@@ -44,10 +43,7 @@ public class CustomDataGridView : VisualElement {
                 flexGrow = 1,
                 flexShrink = 1,
                 width = Length.Percent(100),
-                height = Length.Percent(100),
-                flexDirection = FlexDirection.Column,
-                overflow = Overflow.Visible,
-                justifyContent = Justify.FlexStart
+                flexDirection = FlexDirection.Column
             }
         };
         Add(itemScrollView);
@@ -143,6 +139,7 @@ public class CustomDataGridView : VisualElement {
         if (focusedVisual != null && (this == focusedVisual || row.Contains(focusedVisual))) {
             selectedRow.style.backgroundColor = new Color(0.2f, 0.4f, 0.8f, 0.3f);
         }
+        itemScrollView.ScrollTo(row);
     }
 
     private void HighlightSelectedRow(bool highlight) {

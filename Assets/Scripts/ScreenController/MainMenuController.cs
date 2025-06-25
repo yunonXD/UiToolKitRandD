@@ -8,13 +8,14 @@ using System;
 public class MainMenuController : IScreenController {
     private Action<string> navigate;
 
-    public void Initialize(VisualElement root, Action<string> onNavigate) {
+    public void Initialize(VisualElement root, Action<string> onNavigate)
+    {
         this.navigate = onNavigate;
-        
+
         root.style.flexGrow = 1;
         root.style.height = Length.Percent(100);
         root.style.width = Length.Percent(100);
-        
+
         var items1 = root.Q<DropdownField>("Drop1");
         items1.choices = new List<string> { "Option A", "Option B", "Option C" };
         items1.value = "Option A";
@@ -29,27 +30,30 @@ public class MainMenuController : IScreenController {
         items3.choices = new List<string> { "Option G", "Option H", "Option I" };
         items3.value = "Option G";
         GlobalFocusBlocker.EnableArrowKeyDropdownNavigation(items3);
-        
+
         var vElement = root.Q<VisualElement>("GroupBox");
-        if (vElement != null) {
+        if (vElement != null)
+        {
             vElement.Clear();
+            vElement.style.flexGrow = 1;
+            vElement.style.flexShrink = 1;
+            vElement.style.flexDirection = FlexDirection.Column;
             var grid = new CustomDataGridView();
             grid.SetHeaders(new List<string> { "ID", "Name", "Level", "Description", "Modified", "Data" },
                 new List<float> { 200, 150, 80, 150, 160, 100 });
             LoadScenariosIntoGrid(grid);
-        
+
             // GroupBox가 배치되기 전에 tabIndex로 몇 개 요소가 있는지 계산
             int offset = CountFocusableBefore(root, vElement);
-        
+
             vElement.Add(grid);
             grid.UpdateTabIndexes(offset);
         }
 
-        
+
         GlobalFocusBlocker.ApplyTo(root);
     }
-    
-    
+
     /// GroupBox 이전까지 모든 focusable 요소를 탐색해 tabIndex offset을 구함
     private int CountFocusableBefore(VisualElement root, VisualElement target) {
         var allElements = new List<VisualElement>();

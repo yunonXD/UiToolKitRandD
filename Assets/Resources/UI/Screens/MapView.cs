@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine;
 
 public class MapView : VisualElement {
     private VisualElement  mapContainer;
