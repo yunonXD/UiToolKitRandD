@@ -15,6 +15,7 @@ public class SettingsController : IScreenController {
         var dropdown = root.Q<DropdownField>("DropdownField");
         dropdown.choices = new List<string> { "Option A", "Option B", "Option C" };
         dropdown.value = "Option A"; // 초기 선택 값
+        GlobalFocusBlocker.EnableArrowKeyDropdownNavigation(dropdown);
         
         // 데이터 리스트
         List<string> items = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
@@ -36,7 +37,8 @@ public class SettingsController : IScreenController {
         
         listview.itemsSource = items;
         listview.selectionType = SelectionType.Single;
-
+        
+        GlobalFocusBlocker.ApplyTo(root);
     }
 
     public void OnButtonPressed(int buttonIndex) {

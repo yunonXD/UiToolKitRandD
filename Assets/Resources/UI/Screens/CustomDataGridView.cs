@@ -11,8 +11,6 @@ public class CustomDataGridView : VisualElement {
     private VisualElement selectedRow;
     private const int RowHeight = 28;
 
-    private int tabIndexOffset = 0;
-
     public CustomDataGridView() {
         focusable = true;
         style.flexDirection = FlexDirection.Column;
@@ -90,7 +88,7 @@ public class CustomDataGridView : VisualElement {
 
     public void AddRow(List<string> cellTexts) {
         var row = new VisualElement {
-            focusable = true,
+            focusable = false,
             style = {
                 flexDirection = FlexDirection.Row,
                 alignItems = Align.Center,
@@ -176,69 +174,43 @@ public class CustomDataGridView : VisualElement {
                 }
                 break;
 
-            case KeyCode.Tab: {
+            case KeyCode.Tab:
+                MoveFocusToNext(evt.shiftKey);
                 evt.StopImmediatePropagation();
                 evt.PreventDefault();
-
-                // 루트 가져오기
-                VisualElement root = this;
-                while (root.hierarchy.parent != null) {
-                    root = root.hierarchy.parent;
-                }
-
-                // shift 키 여부
-                bool shift = evt.shiftKey;
-
-                // 포커서블 요소 리스트
-                List<VisualElement> focusables = root.Query<VisualElement>().ToList()
-                    .Where(e => e.focusable && e.tabIndex >= 0)
-                    .ToList();
-
-                focusables.Sort((a, b) => a.tabIndex.CompareTo(b.tabIndex));
-                // 현재 인덱스 찾기
-                int current = focusables.IndexOf(this);
-
-                if (current >= 0) {
-                    int next = shift
-                        ? (current - 1 + focusables.Count) % focusables.Count
-                        : (current + 1) % focusables.Count;
-
-                    focusables[next].Focus();
-                }
                 break;
-            }
         }
     }
+    
+    private void MoveFocusToNext(bool shift) {
+        // 루트 찾기
+        VisualElement root = this;
+        while (root.hierarchy.parent != null)
+            root = root.hierarchy.parent;
 
+        var focusables  = root.Query<VisualElement>().ToList()
+            .Where(e => e.focusable && e.tabIndex >= 0 && e != this)
+            .OrderBy(e => e.tabIndex)
+            .ToList();
+        
+        // 현재 포커스 요소 가져오기
+        var currentFocused = root.panel?.focusController?.focusedElement as VisualElement;
+        if (currentFocused == null) return;
+
+        int currentIndex = focusables.IndexOf(currentFocused);
+        if (currentIndex < 0 || focusables.Count == 0) return;
+
+        int next = shift
+            ? (currentIndex - 1 + focusables.Count) % focusables.Count
+            : (currentIndex + 1) % focusables.Count;
+        
+        Debug.Log($"[Tab] 현재: {currentFocused.name}, 이동 대상: {focusables[next].name}");
+        focusables.ForEach(e => Debug.Log($"{e.name} - {e.tabIndex}"));
+        focusables[next].Focus();
+    }
+    
     public void UpdateTabIndexes(int offset = 0) {
-        tabIndexOffset = offset;
-
-        int index = tabIndexOffset;
-
-        foreach (var row in rows) {
-            foreach (var child in row.Children()) {
-                if (child.focusable)
-                    child.tabIndex = index++;
-            }
-        }
-    }
-
-
-    private int CountFocusable(VisualElement root) {
-        int count = 0;
-        if (root.focusable) count++;
-        foreach (var child in root.Children()) {
-            count += CountFocusable(child);
-        }
-        return count;
-    }
-
-    private bool HasFocusableDescendants(VisualElement root) {
-        if (root.focusable) return true;
-        foreach (var child in root.Children()) {
-            if (HasFocusableDescendants(child)) return true;
-        }
-        return false;
+        this.tabIndex = offset;
     }
 
     public void ClearRows() {
